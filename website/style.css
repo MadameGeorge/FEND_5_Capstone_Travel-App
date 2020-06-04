@@ -1,0 +1,192 @@
+* {
+    box-sizing: border-box;
+  }
+
+body {
+    background-image: url('/images/dominik-schroder-FIKD9t5_5zQ-unsplash.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    font-family: 'Manrope', 'Helvetica', 'Arial', sans-serif;
+    color: #444;
+}
+
+h1 {
+    font-size: 26px;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+figcaption {
+    font-size: 12px;
+    text-align: center;
+    margin: 2rem;
+}
+
+#app {
+    display: grid;
+    grid-template-rows: auto auto 200px;
+    grid-template-columns: 1fr;
+    justify-content: center;
+    grid-gap: 1.5rem;
+}
+
+.holder {
+    border-radius: 5px;
+}
+
+.entry {
+    background: rgba(97, 197, 228, 0.6);
+    padding: 1rem;
+}
+
+#entryHolder {
+    background: rgba(255, 255, 255, 0.7);
+    padding: 1rem;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#date {
+    font-size: 16px;
+}
+
+#temp {
+    font-size: 16px;
+}
+
+#content {
+    flex: 1 1 100%;
+    padding-top: 1rem;
+}
+
+label, 
+.title {
+    display:block;
+    font-size: 18px;
+    font-weight: bolder;
+    margin-bottom: 0.5rem;
+}
+
+
+/*  Basic Styling To Override Default For Basic HTML Elements */
+input,
+textarea {
+    width: 100%;
+    background:#fff;
+    font-size: 18px;
+    border: none;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    resize: none;
+}
+
+button {
+    width: 100%;
+    background: rgba(97, 197, 228, 1);
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: bolder;
+    letter-spacing: 2px;
+    border: 0;
+    padding: 1rem;
+    position: relative;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(155, 170, 172, 0.5);
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+button:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: rgb(82, 193, 226);
+    box-shadow: 0 5px 15px rgba(155, 170, 172, 0.8);
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out;
+    z-index: -1;
+}
+
+button:hover {
+    transform: scale(1.01, 1.01);
+}
+
+button:hover::after {
+    opacity: 1;
+}
+
+button:active {
+    transform: translateY(2px);
+    transition: transform 90ms ease-out;
+}
+
+/* Reset style for HTML element on active to have no border */
+input:focus,
+select:focus,
+textarea:focus,
+fieldset,
+textarea,
+button,
+button:focus {
+    outline: none;
+}
+
+fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+}
+
+/* Style for Placeholder Text*/
+::placeholder, /* Firefox, Chrome, Opera */ 
+:-ms-input-placeholder, /* Internet Explorer 10-11 */ 
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #999; 
+    font-family: 'Oswald', sans-serif;
+}
+
+/* Responsive behaviours */
+@media only screen and (min-width: 425px) {
+    #app {
+        grid-template-columns: auto 400px auto;
+        grid-template-areas: 
+        '. head .'
+        '. form .'
+        '. entry .';
+    }
+
+    .headline {
+        grid-area: head;
+    }
+    
+    .form {
+        grid-area: form;
+    }
+    
+    .entry {
+        grid-area: entry;
+    }
+
+    input,
+    textarea, 
+    button, 
+    .title,
+    .holder {
+        width: 400px;
+    }
+
+    h1 {
+        font-size: 36px;
+    }
+}
