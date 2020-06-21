@@ -6,7 +6,7 @@ let today = new Date();
 let dayToday = today.getDate() + '.' + (today.getMonth()+1) + '.' + today.getFullYear();
 
 // Personal API Key for OpenWeatherMap API
-const apiKey = config.MY_API_KEY;
+const apiKey = process.env.MY_API_KEY;
 
 // Event listener to add function to existing HTML DOM element
 document.getElementById('generate').addEventListener('click', updateJournal);
