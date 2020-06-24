@@ -19,33 +19,37 @@ app.use(cors());
 app.use(express.static('dist'));
 
 // Setup Server
-const port = 8081;
+const port = 8080;
 
 const server = app.listen(port, () => {
 	console.log('server is running');
 	console.log('running on localhost: ' + port);
 });
 
-// Env
-const dotenv = require('dotenv');
-dotenv.config();
-
-// Create an object to store data 
-const journalEntry = {};
+// // Env
+// const dotenv = require('dotenv');
+// dotenv.config();
 
 // Initialize all route with a callback function
-app.get('/get', getJournalEntry);
+app.get('/get', getResults);
 
-function getJournalEntry(req, res) {
-	res.send(journalEntry);
+function getResults(req, res) {
+	res.send(results);
 }
 
-// // Post Route
-app.post('/add', addJournalEntry);
+// Post Route
 
-function addJournalEntry(request, response) {
-	journalEntry['date'] = request.body.date;
-	journalEntry['temperature'] = request.body.temperature;
-	journalEntry['content'] = request.body.content;
-	response.send(journalEntry);
+const results = {};
+
+app.post('/add', addTrip);
+
+function addTrip(request, response) {
+	results['departureDate'] = request.body.departureDate;
+	results['daysRemain'] = request.body.daysRemain;
+	results['city'] = request.body.city;
+	results['latitude'] = request.body.latitude;
+	results['longitude'] = request.body.longitude;
+	results['country'] = request.body.country;
+	console.log(results);
+	response.send(results);
 }
