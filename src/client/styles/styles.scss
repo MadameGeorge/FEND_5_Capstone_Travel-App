@@ -76,13 +76,14 @@ label,
 /*  Basic Styling To Override Default For Basic HTML Elements */
 input,
 textarea {
-    width: 100%;
     background:#fff;
-    font-size: 18px;
     border: none;
-    padding: 1rem;
     border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(155, 170, 172, 0.8);
+    font-size: 18px;
     margin-bottom: 1rem;
+    padding: 1rem;
+    width: 100%;
     resize: none;
 }
 
