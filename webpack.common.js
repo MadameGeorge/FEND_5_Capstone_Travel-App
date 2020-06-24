@@ -1,14 +1,17 @@
 const path = require('path');
 const webpack = require('webpack');
-const babelPolyfill = require('babel-polyfill');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
+// const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 module.exports = {
-	entry: ['babel-polyfill', './src/client/index.js'],
+	entry: ['./src/client/index.js'],
 	output: {
 		libraryTarget: 'var',
 		library: 'Client'
+	},
+	node: {
+		fs: 'empty'
 	},
 	module: {
 		rules: [
@@ -38,6 +41,9 @@ module.exports = {
 			template: './src/client/views/index.html',
 			filename: './index.html'
 		}),
-		new WorkboxWebpackPlugin.GenerateSW()
+		new Dotenv({
+			safe: './.env_sample',
+		}),
+		// new WorkboxWebpackPlugin.GenerateSW()
 	]
 };

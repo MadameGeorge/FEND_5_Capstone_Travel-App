@@ -19,17 +19,10 @@ module.exports = merge(common, {
 	},
 	plugins: [
 		new CleanWebpackPlugin({
-			// Simulate the removal of files
-			dry: true,
-
-			// Write Logs to Console
-			verbose: true,
-
-			// Automatically remove all unused webpack assets on rebuild
-			cleanStaleWebpackAssets: true,
-
-			// Do not allow removal of current webpack assets
-			protectWebpackAssets: false,
+			dry: true, // Simulate the removal of files
+			verbose: true, // Write Logs to Console
+			cleanStaleWebpackAssets: true, // Automatically remove all unused webpack assets on rebuild
+			protectWebpackAssets: false, // Do not allow removal of current webpack assets
 		}),
 	]
 });
