@@ -13,8 +13,10 @@
 			<fieldset class="holder form">
 				<label for="city">Which city do you plan to go?</label>
 				<input type="text" id="city" placeholder="Enter city name here">
-				<label for="departure">When?</label>
-				<input type="date" class="myInput" id="departure" placeholder="DD/MM/YYYY"></input>
+				<label for="start-date">Start date</label>
+				<input type="date" id="start-date" placeholder="DD/MM/YYYY"></input>
+				<label for="end-date">End date</label>
+				<input type="date" id="end-date" placeholder="DD/MM/YYYY"></input>
 				<button id="generate" type = "submit">Create trip</button>
 			</fieldset>
 			<div class="holder entry">
@@ -23,7 +25,9 @@
 					<div id="city-name"></div> 
 					<div id="country-name"></div>
 					<div id="departure-date"></div>
+					<div id="arrival-date"></div>
 					<div id="days-remain"></div>
+					<div id="duration"></div>
 				</div>
 			</div>
 		</div>

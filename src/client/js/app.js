@@ -5,33 +5,43 @@ document.getElementById('generate').addEventListener('click', planTrip);
 export function planTrip(e) {
 	
 
-	// let dayToday = today.getDate() + '.' + (today.getMonth()+1) + '.' + today.getFullYear();
-
-	// Personal API Key for OpenWeatherMap API
-	const apiKey = process.env.API_ID;
-
 	// Get value of city and date inputs
 	let cityInput = encodeURIComponent(document.getElementById('city').value);
-	let departureInput = document.getElementById('departure').value;
+	let departureInput = document.getElementById('start-date').value;
+	let arrivalInput = document.getElementById('end-date').value;
+
+	// API Key for Geonames API
+	const geonamesApiKey = process.env.GEONAMES_API_ID;
 	// Geonames API url
-	const baseUrl = 'http://api.geonames.org/searchJSON?q=';
+	const geonamesUrl = 'http://api.geonames.org/searchJSON?q=';
 	// Create Geonames query URL with user input
-	let queryUrl = `${baseUrl} ${cityInput} &username= ${apiKey}`;
-	
+	let geonamesQueryUrl = `${geonamesUrl} ${cityInput} &username= ${geonamesApiKey}`;
+
+	// API Key for Geonames API
+	const pixabayApiKey = process.env.PIXABAY_API_ID;
+	// Pixabay API url
+	const pixabayUrl = 'https://pixabay.com/api';
+	let pizabayQueryUrl = `${pixabayUrl} ${cityInput} &username= ${pixabayApiKey}`;
 	// Call Geonames API
-	getApiGeonames(queryUrl)
+	getApiGeonames(geonamesQueryUrl)
 		// Then post the data to the express server
 		.then(function(apiGeonames) {
 			// Calculate days remain to the trip
-			var departureDate = new Date(departureInput);
+			let departureDate = new Date(departureInput);
+			let arrivalDate = new Date(arrivalInput);
 			let today = new Date();
 			let timeToTrip = departureDate.getTime() - today.getTime();
 			let daysToTrip = (timeToTrip / (1000 * 3600 * 24)).toFixed(0);
+			let durationTime = arrivalDate.getTime() - departureDate.getTime();
+			let durationDays = (durationTime / (1000 * 3600 * 24)).toFixed(0);
+
 			console.log(daysToTrip);
 			// Post the data as an object
 			postData('/add', {
 				departureDate: departureInput,
+				arrivalDate: arrivalInput,
 				daysRemain: daysToTrip,
+				duration: durationDays,
 				city: apiGeonames.geonames[0].name, 
 				latitude: apiGeonames.geonames[0].lat, 
 				longitude: apiGeonames.geonames[0].lng,
@@ -83,11 +93,14 @@ const updateUi = async () => {
 		const tripDetails = await request.json();
 		console.log(tripDetails);
 		const days = (tripDetails.daysRemain == 1) ? 'day' : 'days';
+		const nights = (tripDetails.duration == 1) ? 'night' : 'nights';
 		console.log(days);
 		document.getElementById('city-name').innerHTML = `City: ${tripDetails.city}`;
 		document.getElementById('country-name').innerHTML = `Country: ${tripDetails.country}`;
-		document.getElementById('departure-date').innerHTML = `Country: ${tripDetails.departureDate}`;
+		document.getElementById('departure-date').innerHTML = `From: ${tripDetails.departureDate}`;
+		document.getElementById('arrival-date').innerHTML = `To: ${tripDetails.arrivalDate}`;
 		document.getElementById('days-remain').innerHTML = `Your trip is in: ${tripDetails.daysRemain} ${days}`;
+		document.getElementById('duration').innerHTML = `Trip duration: ${tripDetails.duration} ${nights}`;
 	}
 	catch(error) {
 		console.log('Something went wrong with updating the UI: ', error);
