@@ -6,13 +6,9 @@ import './styles/styles.scss';
 // import desktop from './images/bg-desktop.jpg';
 
 // Js
-// import { handleSubmit } from './js/formHandler';
-// import { postRequest } from './js/formHandler';
-// import { validateInput } from './js/validateInput';
+import { planTrip } from './js/app.js';
 
-// // Export 
-// export {
-// 	handleSubmit,
-// 	postRequest,
-// 	validateInput
-// };
+// Export 
+export {
+	planTrip
+};
