@@ -1,5 +1,6 @@
 // Require Express to run server and routes
 const express = require('express');
+const request = require('request');
 
 // Start up an instance of app
 const app = express();
@@ -26,9 +27,27 @@ const server = app.listen(port, () => {
 	console.log('running on localhost: ' + port);
 });
 
-// // Env
-// const dotenv = require('dotenv');
-// dotenv.config();
+// Proxy for strict cors
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	next();
+});
+  
+app.get('/jokes/random', (req, res) => {
+	request(
+		{ url: 'https://joke-api-strict-cors.appspot.com/jokes/random' },
+		(error, response, body) => {
+			if (error || response.statusCode !== 200) {
+				return res.status(500).json({ type: 'error', message: error.message });
+			}
+			res.json(JSON.parse(body));
+		}
+	);
+});
+  
+//   const PORT = process.env.PORT || 3000;
+//   app.listen(PORT, () => console.log(`listening on ${PORT}`));
+
 
 // Initialize all route with a callback function
 app.get('/get', getResults);
@@ -45,7 +64,9 @@ app.post('/add', addTrip);
 
 function addTrip(request, response) {
 	results['departureDate'] = request.body.departureDate;
+	results['arrivalDate'] = request.body.arrivalDate;
 	results['daysRemain'] = request.body.daysRemain;
+	results['duration'] = request.body.duration;
 	results['city'] = request.body.city;
 	results['latitude'] = request.body.latitude;
 	results['longitude'] = request.body.longitude;
