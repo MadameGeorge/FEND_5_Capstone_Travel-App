@@ -40,8 +40,7 @@ dotenv.config();
 
 // Pixabay API url
 const pixabayApiKey = process.env.PIXABAY_API_ID;
-const pixabayUrl = 'https://pixabay.com/api/?key=';
-const pixabayQueryUrl = `${pixabayUrl}${pixabayApiKey}&q=`;
+const pixabayQueryUrl = `https://pixabay.com/api/?key=${pixabayApiKey}&q=`;
 
 // Pixabay API call
 app.post('/getimage', async (req, res) => {

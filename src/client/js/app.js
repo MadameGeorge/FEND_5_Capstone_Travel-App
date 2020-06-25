@@ -5,17 +5,20 @@ document.getElementById('generate').addEventListener('click', planTrip);
 export function planTrip() {
 	
 
-	// Get value of city and date inputs
+	// Get value of city and date form inputs
 	let cityInput = encodeURIComponent(document.getElementById('city').value);
 	let departureInput = document.getElementById('start-date').value;
 	let arrivalInput = document.getElementById('end-date').value;
 
-	// API Key for Geonames API
-	const geonamesApiKey = process.env.GEONAMES_API_ID;
+	// WeatherBit API url
+	const weatherbitApiKey = process.env.WEATHERBIT_API_ID;
+	const weatherbitQueryUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${weatherbitApiKey}`;
+	// Change date input to WeatherBit format YYYY-MM-DD
+	const weatherbitDate = weatherbitDate(departureInput);
+
 	// Geonames API url
-	const geonamesUrl = 'http://api.geonames.org/searchJSON?q=';
-	// Create Geonames query URL with user input
-	let geonamesQueryUrl = `${geonamesUrl} ${cityInput} &username= ${geonamesApiKey}`;
+	const geonamesApiKey = process.env.GEONAMES_API_ID;
+	let geonamesQueryUrl = `http://api.geonames.org/searchJSON?q=${cityInput}&username=${geonamesApiKey}`;
 
 	// Call Geonames API
 	getApiGeonames(geonamesQueryUrl)
@@ -23,6 +26,7 @@ export function planTrip() {
 		.then(function(apiGeonames) {
 			// Calculate days remain to the trip
 			let departureDate = new Date(departureInput);
+			console.log(departureDate);
 			let arrivalDate = new Date(arrivalInput);
 			let today = new Date();
 			let timeToTrip = departureDate.getTime() - today.getTime();
@@ -64,6 +68,13 @@ export function planTrip() {
 		});
 }
 
+/* Function to formated date needed to call Weatherbit */
+function weatherbitDate(date) {
+	let formatedDepartureDate = new Date(date);
+	let weatherbitDepartureDate = formatedDepartureDate.getFullYear() + '-' + (formatedDepartureDate.getMonth()+1) + '-' + formatedDepartureDate.getDate();
+	console.log(weatherbitDepartureDate);
+	return weatherbitDepartureDate;
+}
 
 /* Function to GET Geonames API Data */
 const getApiGeonames = async (url) => {
