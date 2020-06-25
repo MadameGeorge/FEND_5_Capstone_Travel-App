@@ -1,3 +1,5 @@
+/* Server setup */
+
 // Require Express to run server and routes
 const express = require('express');
 const fetch = require('node-fetch');
@@ -5,8 +7,8 @@ const fetch = require('node-fetch');
 const app = express();
 
 /* Dependencies */
-/* Middleware*/
-//Here we are configuring express to use body-parser as middle-ware.
+/* Middleware */
+// Express config to use body-parser as middleware.
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -33,21 +35,22 @@ dotenv.config();
 
 
 
-// Pixabay API call
+/* Weatherbit API call */
+
+// POST route to receive a call with data from client
 app.post('/getweather', async (req, res) => {
 	const duration = req.body.duration;
-	const lat = req.body.lat;
-	const lon = req.body.lon;
-	const weather = await getWeather(duration, lat, lon);
+	const weather = await getWeather(duration);
 	res.send(weather);
 	console.log('weather:', weather);
 });
-
-const getWeather = async (duration, lat, lon) => {
+// Function to make a call to Weatherbit
+const getWeather = async (duration) => {
 	// WeatherBit API url
 	const weatherbitApiKey = process.env.WEATHERBIT_API_ID;
 	const weatherbitQueryUrl = 'https://api.weatherbit.io/v2.0/forecast/daily?lat=';
-
+	const lat = results.latitude;
+	const lon = results.longitude;
 	const response = await fetch(`${weatherbitQueryUrl}${lat}&lon=${lon}&days=${duration}&key=${weatherbitApiKey}`);
 	try {
 		const weather = await response.json();
@@ -61,7 +64,9 @@ const getWeather = async (duration, lat, lon) => {
 
 
 
-// Pixabay API call
+/* Pixabay API call */
+
+// POST route to receive a call with data from client
 app.post('/getimage', async (req, res) => {
 	const city = req.body.city;
 	const img = await getImage(city);
@@ -87,10 +92,12 @@ const getImage = async (city) => {
 
 
 
-// Database
+/* Database object */
 let results = {};
 
-// Endpoints
+
+
+/* Endpoints */
 
 // GET 
 app.get('/get', getResults);
