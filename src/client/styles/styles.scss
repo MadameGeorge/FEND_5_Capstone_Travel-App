@@ -11,6 +11,12 @@ body {
     color: #444;
 }
 
+img {
+    width: 100%;
+    object-fit: cover;
+    margin-top: 1rem;
+}
+
 h1 {
     font-size: 26px;
 }
@@ -27,7 +33,7 @@ figcaption {
 
 #app {
     display: grid;
-    grid-template-rows: auto auto 200px;
+    grid-template-rows: repeat(3, auto);
     grid-template-columns: 1fr;
     justify-content: center;
     grid-gap: 1.5rem;
@@ -49,19 +55,6 @@ figcaption {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-}
-
-#date {
-    font-size: 16px;
-}
-
-#temp {
-    font-size: 16px;
-}
-
-#content {
-    flex: 1 1 100%;
-    padding-top: 1rem;
 }
 
 label, 
