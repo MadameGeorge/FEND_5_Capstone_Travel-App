@@ -1,6 +1,5 @@
 // Require Express to run server and routes
 const express = require('express');
-const request = require('request');
 const fetch = require('node-fetch');
 // Start up an instance of app
 const app = express();
@@ -22,6 +21,7 @@ app.use(express.static('dist'));
 // Setup Server
 const port = 8080;
 
+// eslint-disable-next-line no-unused-vars
 const server = app.listen(port, () => {
 	console.log('server is running');
 	console.log('running on localhost: ' + port);
@@ -31,26 +31,49 @@ const server = app.listen(port, () => {
 const dotenv = require('dotenv');
 dotenv.config();
 
-// Proxy for strict cors
-// app.use((req, res, next) => {
-// 	res.header('Access-Control-Allow-Origin', '*');
-// 	next();
-// });
 
 
-// Pixabay API url
-const pixabayApiKey = process.env.PIXABAY_API_ID;
-const pixabayQueryUrl = `https://pixabay.com/api/?key=${pixabayApiKey}&q=`;
+// Pixabay API call
+app.post('/getweather', async (req, res) => {
+	const duration = req.body.duration;
+	const lat = req.body.lat;
+	const lon = req.body.lon;
+	const weather = await getWeather(duration, lat, lon);
+	res.send(weather);
+	console.log('weather:', weather);
+});
+
+const getWeather = async (duration, lat, lon) => {
+	// WeatherBit API url
+	const weatherbitApiKey = process.env.WEATHERBIT_API_ID;
+	const weatherbitQueryUrl = 'https://api.weatherbit.io/v2.0/forecast/daily?lat=';
+
+	const response = await fetch(`${weatherbitQueryUrl}${lat}&lon=${lon}&days=${duration}&key=${weatherbitApiKey}`);
+	try {
+		const weather = await response.json();
+		console.log('WEATHERBIT API' + weather);
+		return weather;
+	}
+	catch(error) {
+		console.log('Something went wrong with an Pixabay API: ', error);
+	}
+};
+
+
 
 // Pixabay API call
 app.post('/getimage', async (req, res) => {
 	const city = req.body.city;
-	const img = await getImage(pixabayQueryUrl, city);
+	const img = await getImage(city);
 	res.send(img);
 	console.log(img);
 });
 
-const getImage = async (pixabayQueryUrl, city) => {
+const getImage = async (city) => {
+	// Pixabay API url
+	const pixabayApiKey = process.env.PIXABAY_API_ID;
+	const pixabayQueryUrl = `https://pixabay.com/api/?key=${pixabayApiKey}&q=`;
+
 	const response = await fetch(pixabayQueryUrl + city + '&orientation=horizontal&image_type=photo');
 	try {
 		const apiPixabay = await response.json();
@@ -61,6 +84,7 @@ const getImage = async (pixabayQueryUrl, city) => {
 		console.log('Something went wrong with an Pixabay API: ', error);
 	}
 };
+
 
 
 // Database
@@ -92,7 +116,12 @@ function addTrip(request, response) {
 // PATCH
 app.patch('/update', updateTrip);
 function updateTrip(request, response) {
-	results['imageUrl'] = request.body.imageUrl;
+	if (request.body.imageUrl !== undefined) {
+		results['imageUrl'] = request.body.imageUrl;
+	}
+	if (request.body.weather !== undefined) {
+		results['weather'] = request.body.weather;
+	}
 	console.log(results);
 	response.send(results);
 }

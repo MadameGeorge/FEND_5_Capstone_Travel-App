@@ -10,11 +10,8 @@ export function planTrip() {
 	let departureInput = document.getElementById('start-date').value;
 	let arrivalInput = document.getElementById('end-date').value;
 
-	// WeatherBit API url
-	const weatherbitApiKey = process.env.WEATHERBIT_API_ID;
-	const weatherbitQueryUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${weatherbitApiKey}`;
 	// Change date input to WeatherBit format YYYY-MM-DD
-	const weatherbitDate = weatherbitDate(departureInput);
+	// const weatherbitDate = weatherbitDate(departureInput);
 
 	// Geonames API url
 	const geonamesApiKey = process.env.GEONAMES_API_ID;
@@ -51,7 +48,20 @@ export function planTrip() {
 		.then( () => {
 			updateUi();
 		});
-
+		
+	// Call Weather API
+	postData('/getweather', { duration: 3, lat: 48.85341, lon: 2.3488 })
+		// Then post the data to the express server
+		.then(function(apiWeatherbit) {
+			console.log('PIXABAY pre post' + apiWeatherbit);
+			updateData('/update', {
+				weather: apiWeatherbit.data[0].weather.description,
+			});
+		})
+		// Then update UI
+		.then( () => {
+			displayWeather();
+		});
 	
 	// Call Pixabay API
 	postData('/getimage', { city: cityInput})
@@ -69,12 +79,12 @@ export function planTrip() {
 }
 
 /* Function to formated date needed to call Weatherbit */
-function weatherbitDate(date) {
-	let formatedDepartureDate = new Date(date);
-	let weatherbitDepartureDate = formatedDepartureDate.getFullYear() + '-' + (formatedDepartureDate.getMonth()+1) + '-' + formatedDepartureDate.getDate();
-	console.log(weatherbitDepartureDate);
-	return weatherbitDepartureDate;
-}
+// function weatherbitDate(date) {
+// 	let formatedDepartureDate = new Date(date);
+// 	let weatherbitDepartureDate = formatedDepartureDate.getFullYear() + '-' + (formatedDepartureDate.getMonth()+1) + '-' + formatedDepartureDate.getDate();
+// 	console.log(weatherbitDepartureDate);
+// 	return weatherbitDepartureDate;
+// }
 
 /* Function to GET Geonames API Data */
 const getApiGeonames = async (url) => {
@@ -155,6 +165,19 @@ const displayImage = async () => {
 		const cityImage = document.getElementById('city-image');
 		console.log(cityImage);
 		cityImage.setAttribute('src', image.imageUrl);
+	}
+	catch(error) {
+		console.log('Something went wrong with updating the UI: ', error);
+	}
+};
+
+/* Function to GET project data and display image in UI */
+const displayWeather = async () => {
+	const request = await fetch('/get');
+	try {
+		const weather = await request.json();
+		console.log('PIXABAY UPDATE UI' + weather);
+		document.getElementById('weather').innerHTML = `weather: ${weather.weather}`;
 	}
 	catch(error) {
 		console.log('Something went wrong with updating the UI: ', error);
