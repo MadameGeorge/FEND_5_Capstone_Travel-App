@@ -2,7 +2,7 @@
 document.getElementById('generate').addEventListener('click', planTrip);
 
 /* Function called by event listener */
-export function planTrip(e) {
+export function planTrip() {
 	
 
 	// Get value of city and date inputs
@@ -17,11 +17,6 @@ export function planTrip(e) {
 	// Create Geonames query URL with user input
 	let geonamesQueryUrl = `${geonamesUrl} ${cityInput} &username= ${geonamesApiKey}`;
 
-	// API Key for Geonames API
-	const pixabayApiKey = process.env.PIXABAY_API_ID;
-	// Pixabay API url
-	const pixabayUrl = 'https://pixabay.com/api';
-	let pizabayQueryUrl = `${pixabayUrl} ${cityInput} &username= ${pixabayApiKey}`;
 	// Call Geonames API
 	getApiGeonames(geonamesQueryUrl)
 		// Then post the data to the express server
@@ -52,9 +47,25 @@ export function planTrip(e) {
 		.then( () => {
 			updateUi();
 		});
+
+	
+	// Call Pixabay API
+	postData('/getimage', { city: cityInput})
+		// Then post the data to the express server
+		.then(function(apiPixabay) {
+			console.log('PIXABAY pre post' + apiPixabay);
+			updateData('/update', {
+				imageUrl: apiPixabay.hits[0].webformatURL,
+			});
+		})
+		// Then update UI
+		.then( () => {
+			displayImage();
+		});
 }
 
-/* Function to GET Web API Data*/
+
+/* Function to GET Geonames API Data */
 const getApiGeonames = async (url) => {
 	let request = await fetch(url);
 	try {
@@ -63,7 +74,26 @@ const getApiGeonames = async (url) => {
 		return apiGeonames;
 	}
 	catch(error) {
-		console.log('Something went wrong with an API: ', error);
+		console.log('Something went wrong with an Geonames API: ', error);
+	}
+};
+
+/* Function to PATCH (update) data */
+const updateData = async ( url = '', data = {} ) => {
+	let response = await fetch(url, {
+		method: 'PATCH',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data)
+	});
+	try {
+		const newData = await response.json();
+		console.log(newData);
+		return newData;
+	}
+	catch(error) {
+		console.log('Something went wrong with fetching the post data: ', error);
 	}
 };
 
@@ -86,15 +116,13 @@ const postData = async ( url = '', data = {} ) => {
 	}
 };
 
-/* Function to GET Project Data to update the UI*/
+/* Function to GET Project Data to update the UI */
 const updateUi = async () => {
 	const request = await fetch('/get');
 	try {
 		const tripDetails = await request.json();
-		console.log(tripDetails);
 		const days = (tripDetails.daysRemain == 1) ? 'day' : 'days';
 		const nights = (tripDetails.duration == 1) ? 'night' : 'nights';
-		console.log(days);
 		document.getElementById('city-name').innerHTML = `City: ${tripDetails.city}`;
 		document.getElementById('country-name').innerHTML = `Country: ${tripDetails.country}`;
 		document.getElementById('departure-date').innerHTML = `From: ${tripDetails.departureDate}`;
@@ -106,3 +134,18 @@ const updateUi = async () => {
 		console.log('Something went wrong with updating the UI: ', error);
 	}
 }; 
+
+/* Function to GET project data and display image in UI */
+const displayImage = async () => {
+	const request = await fetch('/get');
+	try {
+		const image = await request.json();
+		console.log('PIXABAY UPDATE UI' + image);
+		const cityImage = document.getElementById('city-image');
+		console.log(cityImage);
+		cityImage.setAttribute('src', image.imageUrl);
+	}
+	catch(error) {
+		console.log('Something went wrong with updating the UI: ', error);
+	}
+};

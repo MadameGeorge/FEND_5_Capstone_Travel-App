@@ -1,7 +1,7 @@
 // Require Express to run server and routes
 const express = require('express');
 const request = require('request');
-
+const fetch = require('node-fetch');
 // Start up an instance of app
 const app = express();
 
@@ -27,41 +27,56 @@ const server = app.listen(port, () => {
 	console.log('running on localhost: ' + port);
 });
 
+// Setup dotenv
+const dotenv = require('dotenv');
+dotenv.config();
+
 // Proxy for strict cors
-app.use((req, res, next) => {
-	res.header('Access-Control-Allow-Origin', '*');
-	next();
-});
-  
-app.get('/jokes/random', (req, res) => {
-	request(
-		{ url: 'https://joke-api-strict-cors.appspot.com/jokes/random' },
-		(error, response, body) => {
-			if (error || response.statusCode !== 200) {
-				return res.status(500).json({ type: 'error', message: error.message });
-			}
-			res.json(JSON.parse(body));
-		}
-	);
-});
-  
-//   const PORT = process.env.PORT || 3000;
-//   app.listen(PORT, () => console.log(`listening on ${PORT}`));
+// app.use((req, res, next) => {
+// 	res.header('Access-Control-Allow-Origin', '*');
+// 	next();
+// });
 
 
-// Initialize all route with a callback function
+// Pixabay API url
+const pixabayApiKey = process.env.PIXABAY_API_ID;
+const pixabayUrl = 'https://pixabay.com/api/?key=';
+const pixabayQueryUrl = `${pixabayUrl}${pixabayApiKey}&q=`;
+
+// Pixabay API call
+app.post('/getimage', async (req, res) => {
+	const city = req.body.city;
+	const img = await getImage(pixabayQueryUrl, city);
+	res.send(img);
+	console.log(img);
+});
+
+const getImage = async (pixabayQueryUrl, city) => {
+	const response = await fetch(pixabayQueryUrl + city + '&orientation=horizontal&image_type=photo');
+	try {
+		const apiPixabay = await response.json();
+		console.log('PIXABAY API' + apiPixabay);
+		return apiPixabay;
+	}
+	catch(error) {
+		console.log('Something went wrong with an Pixabay API: ', error);
+	}
+};
+
+
+// Database
+let results = {};
+
+// Endpoints
+
+// GET 
 app.get('/get', getResults);
-
 function getResults(req, res) {
 	res.send(results);
 }
 
-// Post Route
-
-const results = {};
-
+// POST
 app.post('/add', addTrip);
-
 function addTrip(request, response) {
 	results['departureDate'] = request.body.departureDate;
 	results['arrivalDate'] = request.body.arrivalDate;
@@ -71,6 +86,14 @@ function addTrip(request, response) {
 	results['latitude'] = request.body.latitude;
 	results['longitude'] = request.body.longitude;
 	results['country'] = request.body.country;
+	console.log(results);
+	response.send(results);
+}
+
+// PATCH
+app.patch('/update', updateTrip);
+function updateTrip(request, response) {
+	results['imageUrl'] = request.body.imageUrl;
 	console.log(results);
 	response.send(results);
 }
