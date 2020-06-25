@@ -1,17 +1,13 @@
-// Event listener to add function to existing HTML DOM element
+/* Event listener to make API calls and update the UI with user and API data */
 document.getElementById('generate').addEventListener('click', planTrip);
 
 /* Function called by event listener */
 export function planTrip() {
 	
-
 	// Get value of city and date form inputs
 	let cityInput = encodeURIComponent(document.getElementById('city').value);
 	let departureInput = document.getElementById('start-date').value;
 	let arrivalInput = document.getElementById('end-date').value;
-
-	// Change date input to WeatherBit format YYYY-MM-DD
-	// const weatherbitDate = weatherbitDate(departureInput);
 
 	// Geonames API url
 	const geonamesApiKey = process.env.GEONAMES_API_ID;
@@ -19,11 +15,9 @@ export function planTrip() {
 
 	// Call Geonames API
 	getApiGeonames(geonamesQueryUrl)
-		// Then post the data to the express server
-		.then(function(apiGeonames) {
-			// Calculate days remain to the trip
+		.then( async function(apiGeonames) {
+			// Calculate days remaining to the trip and trip duration
 			let departureDate = new Date(departureInput);
-			console.log(departureDate);
 			let arrivalDate = new Date(arrivalInput);
 			let today = new Date();
 			let timeToTrip = departureDate.getTime() - today.getTime();
@@ -31,9 +25,8 @@ export function planTrip() {
 			let durationTime = arrivalDate.getTime() - departureDate.getTime();
 			let durationDays = (durationTime / (1000 * 3600 * 24)).toFixed(0);
 
-			console.log(daysToTrip);
-			// Post the data as an object
-			postData('/add', {
+			// Then post trip details to the express server
+			await postData('/add', {
 				departureDate: departureInput,
 				arrivalDate: arrivalInput,
 				daysRemain: daysToTrip,
@@ -43,48 +36,65 @@ export function planTrip() {
 				longitude: apiGeonames.geonames[0].lng,
 				country: apiGeonames.geonames[0].countryName
 			});
-		})
-		// Then update UI
-		.then( () => {
-			updateUi();
-		});
-		
-	// Call Weather API
-	postData('/getweather', { duration: 3, lat: 48.85341, lon: 2.3488 })
-		// Then post the data to the express server
-		.then(function(apiWeatherbit) {
-			console.log('PIXABAY pre post' + apiWeatherbit);
-			updateData('/update', {
-				weather: apiWeatherbit.data[0].weather.description,
-			});
-		})
-		// Then update UI
-		.then( () => {
-			displayWeather();
-		});
-	
-	// Call Pixabay API
-	postData('/getimage', { city: cityInput})
-		// Then post the data to the express server
-		.then(function(apiPixabay) {
-			console.log('PIXABAY pre post' + apiPixabay);
-			updateData('/update', {
-				imageUrl: apiPixabay.hits[0].webformatURL,
-			});
-		})
-		// Then update UI
-		.then( () => {
-			displayImage();
+
+			// Then post image retrieved from Pixabay API to the express server
+			await postData('/getimage', { city: cityInput})
+				.then(function(apiPixabay) {
+					console.log('PIXABAY' + apiPixabay);
+					updateData('/update', {
+						imageUrl: apiPixabay.hits[0].webformatURL,
+					});
+				});
+
+			// Then post weather retrieved from Weatherbits API to the express server
+			await postData('/getweather', { duration: durationDays })
+				.then(function(apiWeatherbit) {
+					console.log('WEATHERBIT' + apiWeatherbit);
+					updateData('/update', {
+						weather: apiWeatherbit.data[0].weather.description,
+						tempMax: apiWeatherbit.data[0]['max_temp'],
+						tempMin: apiWeatherbit.data[0]['min_temp'],
+						tempNow: apiWeatherbit.data[0].temp,
+					});
+				});
+
+			// Then update app user interface
+			await updateUi();
 		});
 }
 
-/* Function to formated date needed to call Weatherbit */
-// function weatherbitDate(date) {
-// 	let formatedDepartureDate = new Date(date);
-// 	let weatherbitDepartureDate = formatedDepartureDate.getFullYear() + '-' + (formatedDepartureDate.getMonth()+1) + '-' + formatedDepartureDate.getDate();
-// 	console.log(weatherbitDepartureDate);
-// 	return weatherbitDepartureDate;
-// }
+
+
+/* Function to GET data from express server to update the UI with */
+const updateUi = async () => {
+	const request = await fetch('/get');
+	try {
+		const tripDetails = await request.json();
+		console.log('UPDATE UI', tripDetails);
+		// Trip
+		const days = (tripDetails.daysRemain == 1) ? 'day' : 'days';
+		const nights = (tripDetails.duration == 1) ? 'night' : 'nights';
+		document.getElementById('city-name').innerHTML = `City: ${tripDetails.city}`;
+		document.getElementById('country-name').innerHTML = `Country: ${tripDetails.country}`;
+		document.getElementById('departure-date').innerHTML = `From: ${tripDetails.departureDate}`;
+		document.getElementById('arrival-date').innerHTML = `To: ${tripDetails.arrivalDate}`;
+		document.getElementById('days-remain').innerHTML = `Your trip is in: ${tripDetails.daysRemain} ${days}`;
+		document.getElementById('duration').innerHTML = `Trip duration: ${tripDetails.duration} ${nights}`;
+		// Image
+		const cityImage = document.getElementById('city-image');
+		cityImage.setAttribute('src', tripDetails.imageUrl);
+		// Weather
+		document.getElementById('weather').innerHTML = `Weather: ${tripDetails.weather}`;
+		document.getElementById('temperature-highest').innerHTML = `Highest temperature: ${tripDetails['temp-max']} C`;
+		document.getElementById('temperature-lowest').innerHTML = `Lowest temperature: ${tripDetails['temp-min']} C`;
+		document.getElementById('temperature-current').innerHTML = `Current temperature: ${tripDetails['temp-now']} C`;
+	}
+	catch(error) {
+		console.log('Something went wrong with updating the UI: ', error);
+	}
+}; 
+
+
 
 /* Function to GET Geonames API Data */
 const getApiGeonames = async (url) => {
@@ -99,24 +109,7 @@ const getApiGeonames = async (url) => {
 	}
 };
 
-/* Function to PATCH (update) data */
-const updateData = async ( url = '', data = {} ) => {
-	let response = await fetch(url, {
-		method: 'PATCH',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(data)
-	});
-	try {
-		const newData = await response.json();
-		console.log(newData);
-		return newData;
-	}
-	catch(error) {
-		console.log('Something went wrong with fetching the post data: ', error);
-	}
-};
+
 
 /* Function to POST data */
 const postData = async ( url = '', data = {} ) => {
@@ -133,53 +126,35 @@ const postData = async ( url = '', data = {} ) => {
 		return newData;
 	}
 	catch(error) {
-		console.log('Something went wrong with fetching the post data: ', error);
+		console.log('Something went wrong with fetching the POST data: ', error);
 	}
 };
 
-/* Function to GET Project Data to update the UI */
-const updateUi = async () => {
-	const request = await fetch('/get');
-	try {
-		const tripDetails = await request.json();
-		const days = (tripDetails.daysRemain == 1) ? 'day' : 'days';
-		const nights = (tripDetails.duration == 1) ? 'night' : 'nights';
-		document.getElementById('city-name').innerHTML = `City: ${tripDetails.city}`;
-		document.getElementById('country-name').innerHTML = `Country: ${tripDetails.country}`;
-		document.getElementById('departure-date').innerHTML = `From: ${tripDetails.departureDate}`;
-		document.getElementById('arrival-date').innerHTML = `To: ${tripDetails.arrivalDate}`;
-		document.getElementById('days-remain').innerHTML = `Your trip is in: ${tripDetails.daysRemain} ${days}`;
-		document.getElementById('duration').innerHTML = `Trip duration: ${tripDetails.duration} ${nights}`;
-	}
-	catch(error) {
-		console.log('Something went wrong with updating the UI: ', error);
-	}
-}; 
 
-/* Function to GET project data and display image in UI */
-const displayImage = async () => {
-	const request = await fetch('/get');
+
+/* Function to PATCH (update) data */
+const updateData = async ( url = '', data = {} ) => {
+	let response = await fetch(url, {
+		method: 'PATCH',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data)
+	});
 	try {
-		const image = await request.json();
-		console.log('PIXABAY UPDATE UI' + image);
-		const cityImage = document.getElementById('city-image');
-		console.log(cityImage);
-		cityImage.setAttribute('src', image.imageUrl);
+		const updatedData = await response.json();
+		console.log(updatedData);
+		return updatedData;
 	}
 	catch(error) {
-		console.log('Something went wrong with updating the UI: ', error);
+		console.log('Something went wrong with fetching the PATCH data: ', error);
 	}
 };
 
-/* Function to GET project data and display image in UI */
-const displayWeather = async () => {
-	const request = await fetch('/get');
-	try {
-		const weather = await request.json();
-		console.log('PIXABAY UPDATE UI' + weather);
-		document.getElementById('weather').innerHTML = `weather: ${weather.weather}`;
-	}
-	catch(error) {
-		console.log('Something went wrong with updating the UI: ', error);
-	}
-};
+/* Function to formated date needed to call Weatherbit */
+// function weatherbitDate(date) {
+// 	let formatedDepartureDate = new Date(date);
+// 	let weatherbitDepartureDate = formatedDepartureDate.getFullYear() + '-' + (formatedDepartureDate.getMonth()+1) + '-' + formatedDepartureDate.getDate();
+// 	console.log(weatherbitDepartureDate);
+// 	return weatherbitDepartureDate;
+// }
