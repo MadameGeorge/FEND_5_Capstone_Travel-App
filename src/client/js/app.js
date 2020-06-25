@@ -52,6 +52,9 @@ export function planTrip() {
 					console.log('WEATHERBIT' + apiWeatherbit);
 					updateData('/update', {
 						weather: apiWeatherbit.data[0].weather.description,
+						tempMax: apiWeatherbit.data[0]['max_temp'],
+						tempMin: apiWeatherbit.data[0]['min_temp'],
+						tempNow: apiWeatherbit.data[0].temp,
 					});
 				});
 
@@ -59,6 +62,39 @@ export function planTrip() {
 			await updateUi();
 		});
 }
+
+
+
+/* Function to GET data from express server to update the UI with */
+const updateUi = async () => {
+	const request = await fetch('/get');
+	try {
+		const tripDetails = await request.json();
+		console.log('UPDATE UI', tripDetails);
+		// Trip
+		const days = (tripDetails.daysRemain == 1) ? 'day' : 'days';
+		const nights = (tripDetails.duration == 1) ? 'night' : 'nights';
+		document.getElementById('city-name').innerHTML = `City: ${tripDetails.city}`;
+		document.getElementById('country-name').innerHTML = `Country: ${tripDetails.country}`;
+		document.getElementById('departure-date').innerHTML = `From: ${tripDetails.departureDate}`;
+		document.getElementById('arrival-date').innerHTML = `To: ${tripDetails.arrivalDate}`;
+		document.getElementById('days-remain').innerHTML = `Your trip is in: ${tripDetails.daysRemain} ${days}`;
+		document.getElementById('duration').innerHTML = `Trip duration: ${tripDetails.duration} ${nights}`;
+		// Image
+		const cityImage = document.getElementById('city-image');
+		cityImage.setAttribute('src', tripDetails.imageUrl);
+		// Weather
+		document.getElementById('weather').innerHTML = `Weather: ${tripDetails.weather}`;
+		document.getElementById('temperature-highest').innerHTML = `Highest temperature: ${tripDetails['temp-max']} C`;
+		document.getElementById('temperature-lowest').innerHTML = `Lowest temperature: ${tripDetails['temp-min']} C`;
+		document.getElementById('temperature-current').innerHTML = `Current temperature: ${tripDetails['temp-now']} C`;
+	}
+	catch(error) {
+		console.log('Something went wrong with updating the UI: ', error);
+	}
+}; 
+
+
 
 /* Function to GET Geonames API Data */
 const getApiGeonames = async (url) => {
@@ -114,36 +150,6 @@ const updateData = async ( url = '', data = {} ) => {
 		console.log('Something went wrong with fetching the PATCH data: ', error);
 	}
 };
-
-
-
-/* Function to GET data from express server to update the UI with */
-const updateUi = async () => {
-	const request = await fetch('/get');
-	try {
-		const tripDetails = await request.json();
-		console.log('UPDATE UI', tripDetails);
-		// Trip
-		const days = (tripDetails.daysRemain == 1) ? 'day' : 'days';
-		const nights = (tripDetails.duration == 1) ? 'night' : 'nights';
-		document.getElementById('city-name').innerHTML = `City: ${tripDetails.city}`;
-		document.getElementById('country-name').innerHTML = `Country: ${tripDetails.country}`;
-		document.getElementById('departure-date').innerHTML = `From: ${tripDetails.departureDate}`;
-		document.getElementById('arrival-date').innerHTML = `To: ${tripDetails.arrivalDate}`;
-		document.getElementById('days-remain').innerHTML = `Your trip is in: ${tripDetails.daysRemain} ${days}`;
-		document.getElementById('duration').innerHTML = `Trip duration: ${tripDetails.duration} ${nights}`;
-		// Image
-		const cityImage = document.getElementById('city-image');
-		cityImage.setAttribute('src', tripDetails.imageUrl);
-		// Weather
-		document.getElementById('weather').innerHTML = `weather: ${tripDetails.weather}`;
-	}
-	catch(error) {
-		console.log('Something went wrong with updating the UI: ', error);
-	}
-}; 
-
-
 
 /* Function to formated date needed to call Weatherbit */
 // function weatherbitDate(date) {

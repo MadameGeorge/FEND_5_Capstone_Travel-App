@@ -128,6 +128,9 @@ function updateTrip(request, response) {
 	}
 	if (request.body.weather !== undefined) {
 		results['weather'] = request.body.weather;
+		results['temp-max'] = request.body.tempMax;
+		results['temp-min'] = request.body.tempMin;
+		results['temp-now'] = request.body.tempNow;
 	}
 	console.log(results);
 	response.send(results);
