@@ -43,12 +43,12 @@ figcaption {
     border-radius: 5px;
 }
 
-.entry {
+.results {
     background: rgba(97, 197, 228, 0.6);
     padding: 1rem;
 }
 
-#entryHolder {
+#results {
     background: rgba(255, 255, 255, 0.7);
     padding: 1rem;
     border-radius: 5px;
@@ -155,7 +155,7 @@ fieldset {
         grid-template-areas: 
         '. head .'
         '. form .'
-        '. entry .';
+        '. results .';
     }
 
     .headline {
@@ -166,8 +166,8 @@ fieldset {
         grid-area: form;
     }
     
-    .entry {
-        grid-area: entry;
+    .results {
+        grid-area: results;
     }
 
     input,
