@@ -1,24 +1,23 @@
-# Weather-Journal App Project
+# Travel App Project
 
 ## Overview
-This is a 3rd project made for Udacity Front End Web Developer Nanodegree I took in May/June 2020. It required me to create an asynchronous web app that uses Web API and user data to dynamically update the UI. The idea was to create a wheather journal, that will allow user to log daily mood description and weather conditions thanks to connection with OpenWeatherMap API.
-
-## Prerequisite
-- Node and Express, 
-- 'cors' package and 'body-parser' package
+This is a .capstone project. made for Udacity Front End Web Developer Nanodegree I took in May/June 2020. The goal of the project was to create a
+travel app, where user could add their trip. By entering a destination and dates, the app will display an image of the place, calculate duration and time remaining to the trip. And of course show the weather.
+I used Pixabay, Geonames and Weatherbit to fetch the data.
 
 ### Optional
 - Nodemon (to restart your server automatically if you were to make any changes)
 
 ## Config
-- To run this application you need your own API key from https://openweathermap.org/api 
-- Once you have it, create a config.js file and save it in a 'website' directory
-- In the config file, enter your API key in an object like this:
-```
-const config = {
-    MY_API_KEY : '&appid=<your_api_key_string>',
-  }
-```
+- To run this application you need your own API keys:
+  - [Pixabay](https://pixabay.com/api/docs/)
+  - [Weatherbit](https://www.weatherbit.io/account/create)
+  - [Geonames](http://www.geonames.org/export/web-services.html) 
+- Once you have it, create `.env` file and add you keys there (see `.env_sample` file to see how to add your keys)
+
 ## Installation
-run 'node server' in your command line
-# FEND_3_Weather-journal
+1. `npm i` to install dependencies
+2. `npm run build-prod` to build production files
+3. `npm run build-dev` to run webpack developer server
+4. `npm run start` to run local node server 
+5. `npm run test` to test the app
