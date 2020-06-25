@@ -1,12 +1,8 @@
 # Travel App Project
 
 ## Overview
-This is a .capstone project. made for Udacity Front End Web Developer Nanodegree I took in May/June 2020. The goal of the project was to create a
-travel app, where user could add their trip. By entering a destination and dates, the app will display an image of the place, calculate duration and time remaining to the trip. And of course show the weather.
-I used Pixabay, Geonames and Weatherbit to fetch the data.
-
-### Optional
-- Nodemon (to restart your server automatically if you were to make any changes)
+This is a *capstone project* made for *Udacity Front End Web Developer Nanodegree* I took in May/June 2020. The goal of the project was to create a travel app, where user could add their trip. By entering a destination and dates, the app will display an image of the place, calculate duration and time remaining to the trip. And of course show the weather.
+I fetched the data from Pixabay, Geonames and Weatherbit.
 
 ## Config
 - To run this application you need your own API keys:
