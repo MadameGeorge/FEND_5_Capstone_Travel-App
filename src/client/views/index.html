@@ -14,10 +14,10 @@
 				<label for="city">Which city do you plan to go?</label>
 				<input type="text" id="city" placeholder="Enter city name here">
 				<label for="start-date">Start date</label>
-				<input type="date" id="start-date" placeholder="DD/MM/YYYY"></input>
+				<input type="date" id="start-date" placeholder="dd/mm/yyyy" date-format="dd/mm/yyyy"></input>
 				<label for="end-date">End date</label>
-				<input type="date" id="end-date" placeholder="DD/MM/YYYY"></input>
-				<button id="generate" type = "submit">Create trip</button>
+				<input type="date" id="end-date" placeholder="dd/mm/yyyy" date-format="dd/mm/yyyy" required pattern="\d{2}-\d{2}-\d{4}"></input>
+				<button id="generate" type="submit">Create trip</button>
 			</fieldset>
 			<div class="holder results">
 				<h2 class="title">Your trip</h2>
@@ -37,7 +37,8 @@
 			</div>
 		</div>
 		<footer>
-			<figcaption>Photo in the background by Dominik Schroder via unsplash.com</figcaption>
+			<figcaption id="image-author"></figcaption>
+			<p>Powered by <a href="https://www.weatherbit.io/">Pixabay</a>, <a href="https://pixabay.com/">WeatherBit</a> and <a href="http://www.geonames.org/">Geonames</a>.</p>
 		</footer>
 		<!-- <script>
 			// Check that service workers are supported
@@ -47,6 +48,9 @@
 					navigator.serviceWorker.register('/service-worker.js');
 				});
 			}
+		</script> -->
+		<!-- <script>
+			@include date-input-polyfill.dist.js
 		</script> -->
 	</body>
 </html>

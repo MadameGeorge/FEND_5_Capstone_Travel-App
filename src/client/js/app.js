@@ -38,16 +38,17 @@ export function planTrip() {
 			});
 
 			// Then post image retrieved from Pixabay API to the express server
-			await postData('/getimage', { city: cityInput})
+			await postData('/image', { city: cityInput})
 				.then(function(apiPixabay) {
 					console.log('PIXABAY' + apiPixabay);
 					updateData('/update', {
 						imageUrl: apiPixabay.hits[0].webformatURL,
+						imageAuthor: apiPixabay.hits[0].user,
 					});
 				});
 
 			// Then post weather retrieved from Weatherbits API to the express server
-			await postData('/getweather', { duration: durationDays })
+			await postData('/weather', { duration: durationDays })
 				.then(function(apiWeatherbit) {
 					console.log('WEATHERBIT' + apiWeatherbit);
 					updateData('/update', {
@@ -78,11 +79,12 @@ const updateUi = async () => {
 		document.getElementById('country-name').innerHTML = `Country: ${tripDetails.country}`;
 		document.getElementById('departure-date').innerHTML = `From: ${tripDetails.departureDate}`;
 		document.getElementById('arrival-date').innerHTML = `To: ${tripDetails.arrivalDate}`;
-		document.getElementById('days-remain').innerHTML = `Your trip is in: ${tripDetails.daysRemain} ${days}`;
+		document.getElementById('days-remain').innerHTML = `Your upcoming trip is in: ${tripDetails.daysRemain} ${days}`;
 		document.getElementById('duration').innerHTML = `Trip duration: ${tripDetails.duration} ${nights}`;
 		// Image
 		const cityImage = document.getElementById('city-image');
 		cityImage.setAttribute('src', tripDetails.imageUrl);
+		document.getElementById('image-author').innerHTML = `Photo by ${tripDetails.imageAuthor} from Pixabay`;
 		// Weather
 		document.getElementById('weather').innerHTML = `Weather: ${tripDetails.weather}`;
 		document.getElementById('temperature-highest').innerHTML = `Highest temperature: ${tripDetails['temp-max']} C`;
