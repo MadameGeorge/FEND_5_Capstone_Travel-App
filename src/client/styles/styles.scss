@@ -2,6 +2,9 @@
     box-sizing: border-box;
   }
 
+$accent-color: #FF6E30;
+$accent-color-dark: #EC5602;
+
 body {
     background-image: url('/images/dominik-schroder-FIKD9t5_5zQ-unsplash.jpg');
     background-repeat: no-repeat;
@@ -25,10 +28,19 @@ h2 {
     margin-top: 0;
 }
 
-figcaption {
+figcaption, 
+p {
     font-size: 12px;
     text-align: center;
     margin: 2rem;
+}
+
+a {
+    font-size: 12px;
+    color: $accent-color-dark;
+    &:hover{
+        color: $accent-color;
+    }
 }
 
 #app {
@@ -67,34 +79,42 @@ label,
 
 
 /*  Basic Styling To Override Default For Basic HTML Elements */
-input,
-textarea {
+input {
     background:#fff;
     border: none;
     border-radius: 5px;
-    box-shadow: 0 5px 15px rgba(155, 170, 172, 0.8);
+    box-shadow: 0 4px 10px rgba(133, 178, 184, 0.4);
+    cursor: pointer;
     font-size: 18px;
     margin-bottom: 1rem;
     padding: 1rem;
     width: 100%;
     resize: none;
+    transition: all 0.12s ease-in-out;
+    &:hover, &:active {
+        box-shadow: 0 1px 2px rgba(133, 178, 184, 0.5);
+    }
+    &[type="date"] {
+        color: #999; 
+        font-family: 'Manrope', 'Helvetica', 'Arial', sans-serif;
+    }
 }
 
 button {
-    width: 100%;
-    background: rgba(97, 197, 228, 1);
+    background: $accent-color;
+    border: 0;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(155, 170, 172, 0.5);
     color: #fff;
-    text-transform: uppercase;
+    cursor: pointer;
     font-size: 16px;
     font-weight: bolder;
     letter-spacing: 2px;
-    border: 0;
     padding: 1rem;
     position: relative;
-    border-radius: 5px;
-    box-shadow: 0 1px 2px rgba(155, 170, 172, 0.5);
-    cursor: pointer;
-    transition: all 0.15s ease-in-out;
+    width: 100%;
+    text-transform: uppercase;    
+    transition: all 0.12s ease-in-out;
     &:after {
         content: "";
         position: absolute;
@@ -102,10 +122,10 @@ button {
         height: 100%;
         left: 0;
         top: 0;
-        background: rgb(82, 193, 226);
+        background: $accent-color-dark;
         box-shadow: 0 5px 15px rgba(155, 170, 172, 0.8);
         opacity: 0;
-        transition: opacity 0.15s ease-in-out;
+        transition: opacity 0.12s ease-in-out;
         z-index: -1;
     }
     &:hover {
@@ -145,17 +165,16 @@ fieldset {
 :-ms-input-placeholder, /* Internet Explorer 10-11 */ 
 ::-ms-input-placeholder { /* Microsoft Edge */
     color: #999; 
-    font-family: 'Oswald', sans-serif;
 }
 
 /* Responsive behaviours */
 @media only screen and (min-width: 425px) {
     #app {
-        grid-template-columns: auto 400px auto;
+        grid-template-columns: 400px auto 400px auto;
         grid-template-areas: 
-        '. head .'
-        '. form .'
-        '. results .';
+        'head . . .'
+        'form . results .'
+        'footer . . .';
     }
 
     .headline {
@@ -168,6 +187,10 @@ fieldset {
     
     .results {
         grid-area: results;
+    }
+
+    footer {
+        grid-area: footer;
     }
 
     input,
