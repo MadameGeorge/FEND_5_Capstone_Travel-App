@@ -7,7 +7,7 @@
 		<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;800&display=swap" rel="stylesheet">
 		<link href="../../../dist/main.css" rel="stylesheet" type="text/css">
 	</head>
-	<body>
+	<body id="city-image">
 		<div id="app">
 			<h1 class="holder headline">Trip planner</h1>
 			<fieldset class="holder form">
@@ -20,26 +20,20 @@
 				<button id="generate" type="submit">Create trip</button>
 			</fieldset>
 			<div class="holder results">
-				<h2 class="title">Your trip</h2>
 				<div id="results">
+					<div id="days-remain"></div>
 					<div id="city-name"></div> 
 					<div id="country-name"></div>
 					<div id="departure-date"></div>
 					<div id="arrival-date"></div>
-					<div id="days-remain"></div>
 					<div id="duration"></div>
-					<img id="city-image">
+					<div id="temperature-current"></div>
 					<div id="weather"></div>					
 					<div id="temperature-highest"></div>
 					<div id="temperature-lowest"></div>
-					<div id="temperature-current"></div>
 				</div>
 			</div>
 		</div>
-		<footer>
-			<figcaption id="image-author"></figcaption>
-			<p>Powered by <a href="https://www.weatherbit.io/">Pixabay</a>, <a href="https://pixabay.com/">WeatherBit</a> and <a href="http://www.geonames.org/">Geonames</a>.</p>
-		</footer>
 		<!-- <script>
 			// Check that service workers are supported
 			if ('serviceWorker' in navigator) {
@@ -53,4 +47,8 @@
 			@include date-input-polyfill.dist.js
 		</script> -->
 	</body>
+	<footer>
+		<p>Powered by <a href="https://www.weatherbit.io/">Pixabay</a>, <a href="https://pixabay.com/">WeatherBit</a> and <a href="http://www.geonames.org/">Geonames</a>.</p>
+		<figcaption id="image-author"></figcaption>
+	</footer>
 </html>

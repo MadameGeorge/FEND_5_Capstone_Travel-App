@@ -1,0 +1,51 @@
+@import '_variables';
+
+#days-remain{
+    flex: 0 0 100%;
+    color: $disabled;
+}
+
+#city-name {
+    flex: 1 1 100%;
+    font-size: 48px;
+    font-weight: 800;
+}
+
+#country-name {
+    flex: 1 1 100%;
+    align-self: start;
+    margin-bottom: 1rem;
+}
+
+#departure-date {
+    flex: 1 1 50%;
+    font-size: 26px;
+}
+
+#arrival-date {
+    flex: 1 1 50%;
+    font-size: 26px;
+}
+
+#duration {
+    flex: 1 1 100%;
+    margin-bottom: 2rem;
+}
+
+#temperature-current {
+    font-size: 26px;
+    flex: 1 1 50%;
+}
+
+#weather {
+    flex: 1 1 50%;
+
+}
+
+#temperature-highest {
+    flex: 1 1 50%;
+}
+
+#temperature-lowest {
+    flex: 1 1 50%;
+}

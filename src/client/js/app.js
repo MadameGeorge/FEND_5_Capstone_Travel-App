@@ -75,21 +75,20 @@ const updateUi = async () => {
 		// Trip
 		const days = (tripDetails.daysRemain == 1) ? 'day' : 'days';
 		const nights = (tripDetails.duration == 1) ? 'night' : 'nights';
-		document.getElementById('city-name').innerHTML = `City: ${tripDetails.city}`;
-		document.getElementById('country-name').innerHTML = `Country: ${tripDetails.country}`;
-		document.getElementById('departure-date').innerHTML = `From: ${tripDetails.departureDate}`;
-		document.getElementById('arrival-date').innerHTML = `To: ${tripDetails.arrivalDate}`;
+		document.getElementById('city-name').innerHTML = tripDetails.city;
+		document.getElementById('country-name').innerHTML = tripDetails.country;
+		document.getElementById('departure-date').innerHTML = tripDetails.departureDate;
+		document.getElementById('arrival-date').innerHTML = `– ${tripDetails.arrivalDate}`;
 		document.getElementById('days-remain').innerHTML = `Your upcoming trip is in: ${tripDetails.daysRemain} ${days}`;
 		document.getElementById('duration').innerHTML = `Trip duration: ${tripDetails.duration} ${nights}`;
 		// Image
-		const cityImage = document.getElementById('city-image');
-		cityImage.setAttribute('src', tripDetails.imageUrl);
+		document.getElementById('city-image').style.backgroundImage = `url(${tripDetails.imageUrl})`;
 		document.getElementById('image-author').innerHTML = `Photo by ${tripDetails.imageAuthor} from Pixabay`;
 		// Weather
-		document.getElementById('weather').innerHTML = `Weather: ${tripDetails.weather}`;
-		document.getElementById('temperature-highest').innerHTML = `Highest temperature: ${tripDetails['temp-max']} C`;
-		document.getElementById('temperature-lowest').innerHTML = `Lowest temperature: ${tripDetails['temp-min']} C`;
-		document.getElementById('temperature-current').innerHTML = `Current temperature: ${tripDetails['temp-now']} C`;
+		document.getElementById('weather').innerHTML = `${tripDetails.weather}`;
+		document.getElementById('temperature-highest').innerHTML = `${tripDetails['temp-max']} C`;
+		document.getElementById('temperature-lowest').innerHTML = `Lowest temp: ${tripDetails['temp-min']} C`;
+		document.getElementById('temperature-current').innerHTML = `Highest temp: ${tripDetails['temp-now']} C`;
 	}
 	catch(error) {
 		console.log('Something went wrong with updating the UI: ', error);
