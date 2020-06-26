@@ -38,7 +38,7 @@ dotenv.config();
 /* Weatherbit API call */
 
 // POST route to receive a call with data from client
-app.post('/getweather', async (req, res) => {
+app.post('/weather', async (req, res) => {
 	const duration = req.body.duration;
 	const weather = await getWeather(duration);
 	res.send(weather);
@@ -67,7 +67,7 @@ const getWeather = async (duration) => {
 /* Pixabay API call */
 
 // POST route to receive a call with data from client
-app.post('/getimage', async (req, res) => {
+app.post('/image', async (req, res) => {
 	const city = req.body.city;
 	const img = await getImage(city);
 	res.send(img);
@@ -79,7 +79,7 @@ const getImage = async (city) => {
 	const pixabayApiKey = process.env.PIXABAY_API_ID;
 	const pixabayQueryUrl = `https://pixabay.com/api/?key=${pixabayApiKey}&q=`;
 
-	const response = await fetch(pixabayQueryUrl + city + '&orientation=horizontal&image_type=photo');
+	const response = await fetch(pixabayQueryUrl + city + '&orientation=horizontal&image_type=photo&category=places');
 	try {
 		const apiPixabay = await response.json();
 		console.log('PIXABAY API' + apiPixabay);
@@ -125,6 +125,7 @@ app.patch('/update', updateTrip);
 function updateTrip(request, response) {
 	if (request.body.imageUrl !== undefined) {
 		results['imageUrl'] = request.body.imageUrl;
+		results['imageAuthor'] = request.body.imageAuthor;
 	}
 	if (request.body.weather !== undefined) {
 		results['weather'] = request.body.weather;
