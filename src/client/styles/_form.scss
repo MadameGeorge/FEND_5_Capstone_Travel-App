@@ -1,0 +1,113 @@
+/* Reset style for HTML element on active to have no border */
+input:focus,
+select:focus,
+textarea:focus,
+fieldset,
+textarea,
+button,
+button:focus {
+    outline: none;
+}
+
+/* Style for Placeholder Text*/
+::placeholder, /* Firefox, Chrome, Opera */ 
+:-ms-input-placeholder, /* Internet Explorer 10-11 */ 
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #999; 
+}
+
+.form {
+    width: 300px;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+}
+
+input,
+textarea, 
+button {
+    width: 100%;
+}
+
+label {
+    display:block;
+    font-size: 18px;
+    font-weight: bolder;
+    margin-bottom: 0.5rem;
+}
+
+input {
+    background:#fff;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(133, 178, 184, 0.4);
+    cursor: pointer;
+    font-size: 18px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    width: 100%;
+    resize: none;
+    transition: all 0.12s ease-in-out;
+    &:hover, &:active {
+        box-shadow: 0 1px 2px rgba(133, 178, 184, 0.5);
+    }
+    &[type="date"] {
+        color: #999; 
+        font-family: 'Manrope', 'Helvetica', 'Arial', sans-serif;
+    }
+}
+
+button {
+    background: $accent-color;
+    border: 0;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(155, 170, 172, 0.5);
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bolder;
+    letter-spacing: 2px;
+    padding: 1rem;
+    position: relative;
+    width: 100%;
+    text-transform: uppercase;    
+    transition: all 0.12s ease-in-out;
+    &:after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background: $accent-color-dark;
+        box-shadow: 0 5px 15px rgba(155, 170, 172, 0.8);
+        opacity: 0;
+        transition: opacity 0.12s ease-in-out;
+        z-index: -1;
+    }
+    &:hover {
+        transform: scale(1.01, 1.01);
+    }
+    
+    &:hover::after {
+        opacity: 1;
+    }
+    
+    &:active {
+        transform: translateY(2px);
+        transition: transform 90ms ease-out;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    input,
+    textarea, 
+    button {
+        width: 400px;
+    }
+
+    button {
+        margin-bottom: 0;
+    }
+}

@@ -9,31 +9,34 @@
 	</head>
 	<body id="city-image">
 		<div id="app">
-			<h1 class="holder headline">Trip planner</h1>
 			<fieldset class="holder form">
+				<h1 class="headline">Trip planner</h1>
 				<label for="city">Which city do you plan to go?</label>
 				<input type="text" id="city" placeholder="Enter city name here">
 				<label for="start-date">Start date</label>
 				<input type="date" id="start-date" placeholder="dd/mm/yyyy" date-format="dd/mm/yyyy"></input>
 				<label for="end-date">End date</label>
-				<input type="date" id="end-date" placeholder="dd/mm/yyyy" date-format="dd/mm/yyyy" required pattern="\d{2}-\d{2}-\d{4}"></input>
+				<input type="date" id="end-date" placeholder="dd/mm/yyyy" date-format="dd/mm/yyyy"></input>
 				<button id="generate" type="submit">Create trip</button>
 			</fieldset>
-			<div class="holder results">
-				<div id="results">
-					<div id="days-remain"></div>
-					<div id="city-name"></div> 
-					<div id="country-name"></div>
-					<div id="departure-date"></div>
-					<div id="arrival-date"></div>
-					<div id="duration"></div>
-					<div id="temperature-current"></div>
-					<div id="weather"></div>					
-					<div id="temperature-highest"></div>
-					<div id="temperature-lowest"></div>
-				</div>
+			<div class="holder results" id="results">
+				<div id="days-remain"></div>
+				<div id="city-name"></div> 
+				<div id="country-name"></div>
+				<div id="duration"></div>
+				<div id="departure-date"></div>
+				<div id="arrival-date"></div>
+				<div id="temperature-current"></div>
+				<div id="weather"></div>
+				<hr>			
+				<div id="temperature-highest"></div>
+				<div id="temperature-lowest"></div>
 			</div>
 		</div>
+		<footer>
+			<p>Powered by <a href="https://www.weatherbit.io/">Pixabay</a>, <a href="https://pixabay.com/">WeatherBit</a> and <a href="http://www.geonames.org/">Geonames</a>.</p>
+			<figcaption id="image-author">Photo by Baptiste Gousset from Unsplash</figcaption>
+		</footer>
 		<!-- <script>
 			// Check that service workers are supported
 			if ('serviceWorker' in navigator) {
@@ -47,8 +50,4 @@
 			@include date-input-polyfill.dist.js
 		</script> -->
 	</body>
-	<footer>
-		<p>Powered by <a href="https://www.weatherbit.io/">Pixabay</a>, <a href="https://pixabay.com/">WeatherBit</a> and <a href="http://www.geonames.org/">Geonames</a>.</p>
-		<figcaption id="image-author"></figcaption>
-	</footer>
 </html>

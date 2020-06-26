@@ -3,11 +3,23 @@ document.getElementById('generate').addEventListener('click', planTrip);
 
 /* Function called by event listener */
 export function planTrip() {
-	
+	document.getElementById('results').style.display = 'flex';
 	// Get value of city and date form inputs
 	let cityInput = encodeURIComponent(document.getElementById('city').value);
 	let departureInput = document.getElementById('start-date').value;
 	let arrivalInput = document.getElementById('end-date').value;
+
+	// Calculate days remaining to the trip and trip duration
+	let departureDate = new Date(departureInput);
+	console.log(departureDate);
+	let arrivalDate = new Date(arrivalInput);
+	const formatedDepartureDate = formatedDate(departureDate);
+	const formatedArrivalDate = formatedDate(arrivalDate);
+	let today = new Date();
+	let timeToTrip = departureDate.getTime() - today.getTime();
+	let daysToTrip = (timeToTrip / (1000 * 3600 * 24)).toFixed(0);
+	let durationTime = arrivalDate.getTime() - departureDate.getTime();
+	let durationDays = (durationTime / (1000 * 3600 * 24)).toFixed(0);
 
 	// Geonames API url
 	const geonamesApiKey = process.env.GEONAMES_API_ID;
@@ -16,19 +28,11 @@ export function planTrip() {
 	// Call Geonames API
 	getApiGeonames(geonamesQueryUrl)
 		.then( async function(apiGeonames) {
-			// Calculate days remaining to the trip and trip duration
-			let departureDate = new Date(departureInput);
-			let arrivalDate = new Date(arrivalInput);
-			let today = new Date();
-			let timeToTrip = departureDate.getTime() - today.getTime();
-			let daysToTrip = (timeToTrip / (1000 * 3600 * 24)).toFixed(0);
-			let durationTime = arrivalDate.getTime() - departureDate.getTime();
-			let durationDays = (durationTime / (1000 * 3600 * 24)).toFixed(0);
 
 			// Then post trip details to the express server
 			await postData('/add', {
-				departureDate: departureInput,
-				arrivalDate: arrivalInput,
+				departureDate: formatedDepartureDate,
+				arrivalDate: formatedArrivalDate,
 				daysRemain: daysToTrip,
 				duration: durationDays,
 				city: apiGeonames.geonames[0].name, 
@@ -72,30 +76,31 @@ const updateUi = async () => {
 	try {
 		const tripDetails = await request.json();
 		console.log('UPDATE UI', tripDetails);
-		// Trip
-		const days = (tripDetails.daysRemain == 1) ? 'day' : 'days';
-		const nights = (tripDetails.duration == 1) ? 'night' : 'nights';
+		// City
 		document.getElementById('city-name').innerHTML = tripDetails.city;
 		document.getElementById('country-name').innerHTML = tripDetails.country;
-		document.getElementById('departure-date').innerHTML = tripDetails.departureDate;
-		document.getElementById('arrival-date').innerHTML = `– ${tripDetails.arrivalDate}`;
+		// Dates
+		const days = (tripDetails.daysRemain == 1) ? 'day' : 'days';
+		const nights = (tripDetails.duration == 1) ? 'night' : 'nights';
+		document.getElementById('departure-date').innerHTML = `Start ${tripDetails.departureDate}`;
+		document.getElementById('arrival-date').innerHTML = `End ${tripDetails.arrivalDate}`;
 		document.getElementById('days-remain').innerHTML = `Your upcoming trip is in: ${tripDetails.daysRemain} ${days}`;
 		document.getElementById('duration').innerHTML = `Trip duration: ${tripDetails.duration} ${nights}`;
 		// Image
 		document.getElementById('city-image').style.backgroundImage = `url(${tripDetails.imageUrl})`;
 		document.getElementById('image-author').innerHTML = `Photo by ${tripDetails.imageAuthor} from Pixabay`;
 		// Weather
-		document.getElementById('weather').innerHTML = `${tripDetails.weather}`;
-		document.getElementById('temperature-highest').innerHTML = `${tripDetails['temp-max']} C`;
-		document.getElementById('temperature-lowest').innerHTML = `Lowest temp: ${tripDetails['temp-min']} C`;
-		document.getElementById('temperature-current').innerHTML = `Highest temp: ${tripDetails['temp-now']} C`;
+		document.getElementById('temperature-current').innerHTML = `${tripDetails['temp-now']} °C`;
+		document.getElementById('temperature-highest').innerHTML = `Max. temp: ${tripDetails['temp-max']} °C`;
+		document.getElementById('temperature-lowest').innerHTML = `Min. temp: ${tripDetails['temp-min']} °C`;
 	}
 	catch(error) {
 		console.log('Something went wrong with updating the UI: ', error);
 	}
 }; 
 
-
+// let today = new Date();
+// let dayToday = today.getDate() + '.' + (today.getMonth()+1) + '.' + today.getFullYear();
 
 /* Function to GET Geonames API Data */
 const getApiGeonames = async (url) => {
@@ -153,9 +158,10 @@ const updateData = async ( url = '', data = {} ) => {
 };
 
 /* Function to formated date needed to call Weatherbit */
-// function weatherbitDate(date) {
-// 	let formatedDepartureDate = new Date(date);
-// 	let weatherbitDepartureDate = formatedDepartureDate.getFullYear() + '-' + (formatedDepartureDate.getMonth()+1) + '-' + formatedDepartureDate.getDate();
-// 	console.log(weatherbitDepartureDate);
-// 	return weatherbitDepartureDate;
-// }
+function formatedDate(date) {
+	let month = ['January', 'February', 'March', 'April', 'May', 'June',
+		'July', 'August', 'September', 'October', 'November', 'December'][date.getMonth()];
+	let formatedDate = date.getDate() + ' ' + month + ' ' + date.getFullYear();
+	console.log(formatedDate);
+	return formatedDate;
+}

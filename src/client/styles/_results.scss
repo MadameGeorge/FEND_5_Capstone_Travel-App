@@ -1,45 +1,56 @@
-@import '_variables';
+@import 'variables';
+
+#results {
+    flex-direction: row;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 5px;
+    padding: 3rem 1rem;
+    display: none;
+}
 
 #days-remain{
     flex: 0 0 100%;
     color: $disabled;
+    margin-bottom: 1rem
 }
 
 #city-name {
     flex: 1 1 100%;
     font-size: 48px;
     font-weight: 800;
-}
-
-#country-name {
-    flex: 1 1 100%;
-    align-self: start;
     margin-bottom: 1rem;
 }
 
-#departure-date {
+#country-name {
     flex: 1 1 50%;
-    font-size: 26px;
-}
-
-#arrival-date {
-    flex: 1 1 50%;
-    font-size: 26px;
+    color: $disabled;
+    margin-bottom: 1rem;
 }
 
 #duration {
+    flex: 1 1 50%;
+    color: $disabled;
+    text-align: right;
+}
+
+#departure-date {
     flex: 1 1 100%;
+    font-weight: 800;
+    padding-right: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+#arrival-date {
+    flex: 1 1 100%;
+    font-weight: 800;
     margin-bottom: 2rem;
 }
 
 #temperature-current {
-    font-size: 26px;
+    font-size: 48px;
     flex: 1 1 50%;
-}
-
-#weather {
-    flex: 1 1 50%;
-
 }
 
 #temperature-highest {
@@ -48,4 +59,12 @@
 
 #temperature-lowest {
     flex: 1 1 50%;
+}
+
+hr {
+    background-color: $accent-color;
+    border-color: $accent-color;
+    border-width: 1px;
+    margin: 2rem 0;
+    width: 100%;
 }
