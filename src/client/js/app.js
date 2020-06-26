@@ -11,7 +11,6 @@ export function planTrip() {
 
 	// Calculate days remaining to the trip and trip duration
 	let departureDate = new Date(departureInput);
-	console.log(departureDate);
 	let arrivalDate = new Date(arrivalInput);
 	const formatedDepartureDate = formatedDate(departureDate);
 	const formatedArrivalDate = formatedDate(arrivalDate);
@@ -44,7 +43,6 @@ export function planTrip() {
 			// Then post image retrieved from Pixabay API to the express server
 			await postData('/image', { city: cityInput})
 				.then(function(apiPixabay) {
-					console.log('PIXABAY' + apiPixabay);
 					updateData('/update', {
 						imageUrl: apiPixabay.hits[0].webformatURL,
 						imageAuthor: apiPixabay.hits[0].user,
@@ -54,7 +52,6 @@ export function planTrip() {
 			// Then post weather retrieved from Weatherbits API to the express server
 			await postData('/weather', { duration: durationDays })
 				.then(function(apiWeatherbit) {
-					console.log('WEATHERBIT' + apiWeatherbit);
 					updateData('/update', {
 						weather: apiWeatherbit.data[0].weather.description,
 						tempMax: apiWeatherbit.data[0]['max_temp'],
@@ -75,7 +72,6 @@ const updateUi = async () => {
 	const request = await fetch('/get');
 	try {
 		const tripDetails = await request.json();
-		console.log('UPDATE UI', tripDetails);
 		// City
 		document.getElementById('city-name').innerHTML = tripDetails.city;
 		document.getElementById('country-name').innerHTML = tripDetails.country;
@@ -107,7 +103,6 @@ const getApiGeonames = async (url) => {
 	let request = await fetch(url);
 	try {
 		const apiGeonames = await request.json();
-		console.log(apiGeonames);
 		return apiGeonames;
 	}
 	catch(error) {
@@ -128,7 +123,6 @@ const postData = async ( url = '', data = {} ) => {
 	});
 	try {
 		const newData = await response.json();
-		console.log(newData);
 		return newData;
 	}
 	catch(error) {
@@ -149,7 +143,6 @@ const updateData = async ( url = '', data = {} ) => {
 	});
 	try {
 		const updatedData = await response.json();
-		console.log(updatedData);
 		return updatedData;
 	}
 	catch(error) {
@@ -162,6 +155,5 @@ function formatedDate(date) {
 	let month = ['January', 'February', 'March', 'April', 'May', 'June',
 		'July', 'August', 'September', 'October', 'November', 'December'][date.getMonth()];
 	let formatedDate = date.getDate() + ' ' + month + ' ' + date.getFullYear();
-	console.log(formatedDate);
 	return formatedDate;
 }

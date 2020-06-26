@@ -21,7 +21,7 @@ app.use(cors());
 app.use(express.static('dist'));
 
 // Setup Server
-const port = 8080;
+const port = 8081;
 
 // eslint-disable-next-line no-unused-vars
 const server = app.listen(port, () => {
@@ -123,16 +123,14 @@ function addTrip(request, response) {
 // PATCH
 app.patch('/update', updateTrip);
 function updateTrip(request, response) {
-	if (request.body.imageUrl !== undefined) {
-		results['imageUrl'] = request.body.imageUrl;
-		results['imageAuthor'] = request.body.imageAuthor;
-	}
-	if (request.body.weather !== undefined) {
-		results['weather'] = request.body.weather;
-		results['temp-max'] = request.body.tempMax;
-		results['temp-min'] = request.body.tempMin;
-		results['temp-now'] = request.body.tempNow;
-	}
+	results['imageUrl'] = request.body.imageUrl;
+	results['imageAuthor'] = request.body.imageAuthor;
+	results['weather'] = request.body.weather;
+	results['temp-max'] = request.body.tempMax;
+	results['temp-min'] = request.body.tempMin;
+	results['temp-now'] = request.body.tempNow;
 	console.log(results);
 	response.send(results);
 }
+
+module.exports = app;
