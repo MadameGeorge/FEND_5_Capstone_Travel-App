@@ -1,3 +1,5 @@
+const dateInputPolyfill = require('date-input-polyfill');
+
 // Sass
 import './styles/styles.scss';
 
@@ -7,6 +9,7 @@ import './styles/styles.scss';
 
 // Js
 import { planTrip } from './js/app.js';
+import './js/date-input-polyfill.dist';
 
 // Export 
 export {
