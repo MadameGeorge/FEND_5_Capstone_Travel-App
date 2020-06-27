@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-// const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 module.exports = {
 	entry: ['./src/client/index.js'],
@@ -44,6 +44,6 @@ module.exports = {
 		new Dotenv({
 			safe: './.env_sample',
 		}),
-		// new WorkboxWebpackPlugin.GenerateSW()
+		new WorkboxWebpackPlugin.GenerateSW()
 	]
 };
