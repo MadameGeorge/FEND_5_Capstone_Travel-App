@@ -1,16 +1,34 @@
 import { planTrip } from '../src/client/js/app';
-const fetchMock = require('fetch-mock');
+import { formatDate } from '../src/client/js/app';
+// const fetchMock = require('fetch-mock');
 
-describe('Test post route', () => {
-	test('Checks if postRequest function is defined', () => {
-		expect(planTrip()).toBeDefined();
+describe('Test date format function', () => {
+	test('Should be a function', () => {
+		expect(typeof formatDate).toBe('function');
+	}),
+
+	test('Should change the format', () => {
+		const date = 'Sun Jun 28 2020 01:00:00 GMT+0100 (British Summer Time)';
+		const dateFormated = '28 June 2020';
+		expect(formatDate(date)).toEqual(dateFormated);
 	});
+});
 
-	test('Checks if postRequest  ', async () => {
-		fetchMock.post('http://fake.com', { polarity: "positive" });
-		const response = await planTrip('http://fake.com');
+describe('Test app js', () => {
 
-		expect.assertions(1);
-		expect(response.polarity).toEqual('positive');
+	document.body.innerHTML =
+    '<div>' +
+    '  <span id="username" />' +
+    '  <button id="generate" />' +
+    '  <div id="results" style="display:none;">' +
+    '    <div id="city" />' +
+    '    <div id="start-date" />' +
+    '    <div id="end-date" />' +
+    '</div>';
+
+	document.getElementById('generate').addEventListener('click', planTrip);
+
+	test('Should be a function', () => {
+		expect(typeof planTrip).toBe('function');
 	});
 });

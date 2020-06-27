@@ -6,7 +6,7 @@
     flex-wrap: wrap;
     background: #fff;
     border-radius: 5px;
-    padding: 3rem;
+    padding: 3rem 2rem;
     display: none;
 }
 
@@ -67,4 +67,11 @@ hr {
     border-width: 1px;
     margin: 2rem 0;
     width: 100%;
+}
+
+@media only screen and (min-width: 420px) {
+    #results {
+        padding: 3rem;
+        display: none;
+    }
 }

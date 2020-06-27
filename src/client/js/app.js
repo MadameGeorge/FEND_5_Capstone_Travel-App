@@ -1,6 +1,3 @@
-/* Event listener to make API calls and update the UI with user and API data */
-document.getElementById('generate').addEventListener('click', planTrip);
-
 /* Function called by event listener */
 export function planTrip() {
 	document.getElementById('results').style.display = 'flex';
@@ -11,9 +8,12 @@ export function planTrip() {
 
 	// Calculate days remaining to the trip and trip duration
 	let departureDate = new Date(departureInput);
+	console.log(departureDate);
 	let arrivalDate = new Date(arrivalInput);
-	const formatedDepartureDate = formatedDate(departureDate);
-	const formatedArrivalDate = formatedDate(arrivalDate);
+	const formatedDepartureDate = formatDate(departureDate);
+	console.log(formatedDepartureDate);
+
+	const formatedArrivalDate = formatDate(arrivalDate);
 	let today = new Date();
 	let timeToTrip = departureDate.getTime() - today.getTime();
 	let daysToTrip = (timeToTrip / (1000 * 3600 * 24)).toFixed(0);
@@ -87,8 +87,8 @@ const updateUi = async () => {
 		// Dates
 		const days = (tripDetails.daysRemain == 1) ? 'day' : 'days';
 		const nights = (tripDetails.duration == 1) ? 'night' : 'nights';
-		document.getElementById('departure-date').innerHTML = `Start ${tripDetails.departureDate}`;
-		document.getElementById('arrival-date').innerHTML = `End ${tripDetails.arrivalDate}`;
+		document.getElementById('departure-date').innerHTML = `Starts: ${tripDetails.departureDate}`;
+		document.getElementById('arrival-date').innerHTML = `Ends: ${tripDetails.arrivalDate}`;
 		document.getElementById('days-remain').innerHTML = `Your upcoming trip is in: ${tripDetails.daysRemain} ${days}`;
 		document.getElementById('duration').innerHTML = `Trip duration: ${tripDetails.duration} ${nights}`;
 		// Image
@@ -159,8 +159,10 @@ const updateData = async ( url = '', data = {} ) => {
 	}
 };
 
-/* Function to formated date needed to call Weatherbit */
-function formatedDate(date) {
+
+
+/* Function to format date */
+export function formatDate(date) {
 	let month = ['January', 'February', 'March', 'April', 'May', 'June',
 		'July', 'August', 'September', 'October', 'November', 'December'][date.getMonth()];
 	let formatedDate = date.getDate() + ' ' + month + ' ' + date.getFullYear();
