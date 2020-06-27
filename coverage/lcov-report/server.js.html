@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.1% </span>
+                <span class="strong">87.69% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>67/69</span>
+                <span class='fraction'>57/65</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.1% </span>
+                <span class="strong">87.69% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>67/69</span>
+                <span class='fraction'>57/65</span>
             </div>
         
             
@@ -191,9 +191,7 @@
 <a name='L132'></a><a href='#L132'>132</a>
 <a name='L133'></a><a href='#L133'>133</a>
 <a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L135'></a><a href='#L135'>135</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -237,12 +235,10 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -266,7 +262,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -274,7 +269,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -312,19 +306,21 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -373,7 +369,6 @@ app.post('/weather', async (req, res) =&gt; {
 	const duration = req.body.duration;
 	const weather = await getWeather(duration);
 	res.send(weather);
-	console.log('weather:', weather);
 });
 // Function to make a call to Weatherbit
 const getWeather = async (duration) =&gt; {
@@ -385,7 +380,6 @@ const getWeather = async (duration) =&gt; {
 	const response = await fetch(`${weatherbitQueryUrl}${lat}&amp;lon=${lon}&amp;days=${duration}&amp;key=${weatherbitApiKey}`);
 	try {
 		const weather = await response.json();
-		console.log('WEATHERBIT API' + weather);
 		return weather;
 	}
 	catch(error) {
@@ -402,7 +396,6 @@ app.post('/image', async (req, res) =&gt; {
 	const city = req.body.city;
 	const img = await getImage(city);
 	res.send(img);
-	console.log(img);
 });
 &nbsp;
 const getImage = async (city) =&gt; {
@@ -413,7 +406,6 @@ const getImage = async (city) =&gt; {
 	const response = await fetch(pixabayQueryUrl + city + '&amp;orientation=horizontal&amp;image_type=photo&amp;category=places');
 	try {
 		const apiPixabay = await response.json();
-		console.log('PIXABAY API' + apiPixabay);
 		return apiPixabay;
 	}
 	catch(error) {
@@ -447,20 +439,22 @@ function addTrip(request, response) {
 	results['latitude'] = request.body.latitude;
 	results['longitude'] = request.body.longitude;
 	results['country'] = request.body.country;
-	console.log(results);
 	response.send(results);
 }
 &nbsp;
 // PATCH
 app.patch('/update', updateTrip);
 function updateTrip(request, response) {
-	results['imageUrl'] = request.body.imageUrl;
-	results['imageAuthor'] = request.body.imageAuthor;
-	results['weather'] = request.body.weather;
-	results['temp-max'] = request.body.tempMax;
-	results['temp-min'] = request.body.tempMin;
-	results['temp-now'] = request.body.tempNow;
-	console.log(results);
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (request.body.imageUrl !== undefined) {
+<span class="cstat-no" title="statement not covered" >		results['imageUrl'] = request.body.imageUrl;</span>
+<span class="cstat-no" title="statement not covered" >		results['imageAuthor'] = request.body.imageAuthor;</span>
+	}
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (request.body.weather !== undefined) {
+<span class="cstat-no" title="statement not covered" >		results['weather'] = request.body.weather;</span>
+<span class="cstat-no" title="statement not covered" >		results['temp-max'] = request.body.tempMax;</span>
+<span class="cstat-no" title="statement not covered" >		results['temp-min'] = request.body.tempMin;</span>
+<span class="cstat-no" title="statement not covered" >		results['temp-now'] = request.body.tempNow;</span>
+	}
 	response.send(results);
 }
 &nbsp;
@@ -472,7 +466,7 @@ module.exports = app;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Jun 27 2020 00:00:50 GMT+0100 (British Summer Time)
+                at Sat Jun 27 2020 01:09:15 GMT+0100 (British Summer Time)
             </div>
         </div>
         <script src="prettify.js"></script>

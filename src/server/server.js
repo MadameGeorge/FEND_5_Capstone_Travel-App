@@ -42,7 +42,6 @@ app.post('/weather', async (req, res) => {
 	const duration = req.body.duration;
 	const weather = await getWeather(duration);
 	res.send(weather);
-	console.log('weather:', weather);
 });
 // Function to make a call to Weatherbit
 const getWeather = async (duration) => {
@@ -54,7 +53,6 @@ const getWeather = async (duration) => {
 	const response = await fetch(`${weatherbitQueryUrl}${lat}&lon=${lon}&days=${duration}&key=${weatherbitApiKey}`);
 	try {
 		const weather = await response.json();
-		console.log('WEATHERBIT API' + weather);
 		return weather;
 	}
 	catch(error) {
@@ -71,7 +69,6 @@ app.post('/image', async (req, res) => {
 	const city = req.body.city;
 	const img = await getImage(city);
 	res.send(img);
-	console.log(img);
 });
 
 const getImage = async (city) => {
@@ -82,7 +79,6 @@ const getImage = async (city) => {
 	const response = await fetch(pixabayQueryUrl + city + '&orientation=horizontal&image_type=photo&category=places');
 	try {
 		const apiPixabay = await response.json();
-		console.log('PIXABAY API' + apiPixabay);
 		return apiPixabay;
 	}
 	catch(error) {
@@ -116,20 +112,22 @@ function addTrip(request, response) {
 	results['latitude'] = request.body.latitude;
 	results['longitude'] = request.body.longitude;
 	results['country'] = request.body.country;
-	console.log(results);
 	response.send(results);
 }
 
 // PATCH
 app.patch('/update', updateTrip);
 function updateTrip(request, response) {
-	results['imageUrl'] = request.body.imageUrl;
-	results['imageAuthor'] = request.body.imageAuthor;
-	results['weather'] = request.body.weather;
-	results['temp-max'] = request.body.tempMax;
-	results['temp-min'] = request.body.tempMin;
-	results['temp-now'] = request.body.tempNow;
-	console.log(results);
+	if (request.body.imageUrl !== undefined) {
+		results['imageUrl'] = request.body.imageUrl;
+		results['imageAuthor'] = request.body.imageAuthor;
+	}
+	if (request.body.weather !== undefined) {
+		results['weather'] = request.body.weather;
+		results['temp-max'] = request.body.tempMax;
+		results['temp-min'] = request.body.tempMin;
+		results['temp-now'] = request.body.tempNow;
+	}
 	response.send(results);
 }
 

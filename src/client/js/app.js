@@ -41,11 +41,17 @@ export function planTrip() {
 			});
 
 			// Then post image retrieved from Pixabay API to the express server
-			await postData('/image', { city: cityInput})
+			await postData('/image', { city: cityInput })
 				.then(function(apiPixabay) {
 					updateData('/update', {
 						imageUrl: apiPixabay.hits[0].webformatURL,
 						imageAuthor: apiPixabay.hits[0].user,
+					});
+				}).catch((error) => {
+					console.log('Pixabay api error:', error);
+					updateData('/update', {
+						imageUrl: 'https://images.unsplash.com/photo-1592157874621-0a8033a473b1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2102&q=80',
+						imageAuthor: 'Photo by Baptiste Gousset from Unsplash',
 					});
 				});
 
@@ -58,6 +64,8 @@ export function planTrip() {
 						tempMin: apiWeatherbit.data[0]['min_temp'],
 						tempNow: apiWeatherbit.data[0].temp,
 					});
+				}).catch((error) => {
+					console.log('Weatherbit api error:', error);
 				});
 
 			// Then update app user interface
@@ -72,6 +80,7 @@ const updateUi = async () => {
 	const request = await fetch('/get');
 	try {
 		const tripDetails = await request.json();
+		console.log(tripDetails);
 		// City
 		document.getElementById('city-name').innerHTML = tripDetails.city;
 		document.getElementById('country-name').innerHTML = tripDetails.country;

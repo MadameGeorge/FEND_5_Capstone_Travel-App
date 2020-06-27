@@ -1,4 +1,5 @@
 /* Reset style for HTML element on active to have no border */
+
 input:focus,
 select:focus,
 textarea:focus,
@@ -9,7 +10,9 @@ button:focus {
     outline: none;
 }
 
-/* Style for Placeholder Text*/
+
+/* Form styles */
+
 ::placeholder, /* Firefox, Chrome, Opera */ 
 :-ms-input-placeholder, /* Internet Explorer 10-11 */ 
 ::-ms-input-placeholder { /* Microsoft Edge */

@@ -29,8 +29,8 @@ describe('Correct endpoints', () => {
 			});
 		expect(response.status).toBe(200);
 		done();
-    });
-    test('Checks if POST route /image status is 200', async (done) => {
+	});
+	test('Checks if POST route /image status is 200', async (done) => {
 		const response = await request
 			.post('/image')
 			.send({
@@ -38,8 +38,8 @@ describe('Correct endpoints', () => {
 			});
 		expect(response.status).toBe(200);
 		done();
-    });
-    test('Checks if POST route /weather status is 200', async (done) => {
+	});
+	test('Checks if POST route /weather status is 200', async (done) => {
 		const response = await request
 			.post('/weather')
 			.send({
