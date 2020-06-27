@@ -1,1 +1,2 @@
 src/client/js/date-input-polyfill.dist.js
+__tests__/

@@ -1,6 +1,5 @@
 import { planTrip } from '../src/client/js/app';
 import { formatDate } from '../src/client/js/app';
-// const fetchMock = require('fetch-mock');
 
 describe('Test date format function', () => {
 	test('Should be a function', () => {
@@ -8,9 +7,10 @@ describe('Test date format function', () => {
 	}),
 
 	test('Should change the format', () => {
-		const date = 'Sun Jun 28 2020 01:00:00 GMT+0100 (British Summer Time)';
-		const dateFormated = '28 June 2020';
-		expect(formatDate(date)).toEqual(dateFormated);
+		const date = '2020-07-06';
+		const dateN =  new Date(date);
+		const dateFormated = '6 July 2020';
+		expect(formatDate(dateN)).toEqual(dateFormated);
 	});
 });
 
