@@ -1,4 +1,9 @@
-/* Function called by event listener */
+import { formatDate } from './formatDate';
+import { updateData } from './updateData';
+import { postData } from './postData';
+import { getApiGeonames } from './getApiGeonames';
+import { updateUi } from './updateUi';
+
 export function planTrip() {
 	document.getElementById('results').style.display = 'flex';
 	// Get value of city and date form inputs
@@ -71,100 +76,4 @@ export function planTrip() {
 			// Then update app user interface
 			await updateUi();
 		});
-}
-
-
-
-/* Function to GET data from express server to update the UI with */
-const updateUi = async () => {
-	const request = await fetch('/get');
-	try {
-		const tripDetails = await request.json();
-		console.log(tripDetails);
-		// City
-		document.getElementById('city-name').innerHTML = tripDetails.city;
-		document.getElementById('country-name').innerHTML = tripDetails.country;
-		// Dates
-		const days = (tripDetails.daysRemain == 1) ? 'day' : 'days';
-		const nights = (tripDetails.duration == 1) ? 'night' : 'nights';
-		document.getElementById('departure-date').innerHTML = `Starts: ${tripDetails.departureDate}`;
-		document.getElementById('arrival-date').innerHTML = `Ends: ${tripDetails.arrivalDate}`;
-		document.getElementById('days-remain').innerHTML = `Your upcoming trip is in: ${tripDetails.daysRemain} ${days}`;
-		document.getElementById('duration').innerHTML = `Trip duration: ${tripDetails.duration} ${nights}`;
-		// Image
-		document.getElementById('city-image').style.backgroundImage = `url(${tripDetails.imageUrl})`;
-		document.getElementById('image-author').innerHTML = `Photo by ${tripDetails.imageAuthor} from Pixabay`;
-		// Weather
-		document.getElementById('temperature-current').innerHTML = `${tripDetails['temp-now']} °C`;
-		document.getElementById('temperature-highest').innerHTML = `Max. temp: ${tripDetails['temp-max']} °C`;
-		document.getElementById('temperature-lowest').innerHTML = `Min. temp: ${tripDetails['temp-min']} °C`;
-	}
-	catch(error) {
-		console.log('Something went wrong with updating the UI: ', error);
-	}
-}; 
-
-// let today = new Date();
-// let dayToday = today.getDate() + '.' + (today.getMonth()+1) + '.' + today.getFullYear();
-
-/* Function to GET Geonames API Data */
-const getApiGeonames = async (url) => {
-	let request = await fetch(url);
-	try {
-		const apiGeonames = await request.json();
-		return apiGeonames;
-	}
-	catch(error) {
-		console.log('Something went wrong with an Geonames API: ', error);
-	}
-};
-
-
-
-/* Function to POST data */
-const postData = async ( url = '', data = {} ) => {
-	let response = await fetch(url, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(data)
-	});
-	try {
-		const newData = await response.json();
-		return newData;
-	}
-	catch(error) {
-		console.log('Something went wrong with fetching the POST data: ', error);
-	}
-};
-
-
-
-/* Function to PATCH (update) data */
-const updateData = async ( url = '', data = {} ) => {
-	let response = await fetch(url, {
-		method: 'PATCH',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(data)
-	});
-	try {
-		const updatedData = await response.json();
-		return updatedData;
-	}
-	catch(error) {
-		console.log('Something went wrong with fetching the PATCH data: ', error);
-	}
-};
-
-
-
-/* Function to format date */
-export function formatDate(date) {
-	let month = ['January', 'February', 'March', 'April', 'May', 'June',
-		'July', 'August', 'September', 'October', 'November', 'December'][date.getMonth()];
-	let formatedDate = date.getDate() + ' ' + month + ' ' + date.getFullYear();
-	return formatedDate;
 }
