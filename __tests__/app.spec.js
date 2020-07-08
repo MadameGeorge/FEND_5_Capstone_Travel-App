@@ -1,5 +1,5 @@
 import { planTrip } from '../src/client/js/app';
-import { formatDate } from '../src/client/js/app';
+import { formatDate } from '../src/client/js/formatDate';
 
 describe('Test date format function', () => {
 	test('Should be a function', () => {
